@@ -1,6 +1,7 @@
 
 # First stage: Build the application
 FROM openjdk:24-slim-bookworm AS build
+RUN groupadd -r gradle && useradd --no-log-init -r -g gradle gradle
 COPY --chown=gradle:gradle . /harness/gradle/src
 WORKDIR /harness/gradle/src
 RUN ./gradlew build

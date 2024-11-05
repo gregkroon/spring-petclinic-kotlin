@@ -1,6 +1,7 @@
+
 # First stage: Build the application
 FROM openjdk:24-slim-bookworm AS build
-#COPY --chown=gradle:gradle . /harness/gradle/src
+COPY --chown=gradle:gradle . /harness/gradle/src
 WORKDIR /harness/gradle/src
 RUN ./gradlew build
 RUN pwd
@@ -14,4 +15,3 @@ EXPOSE 8080
 COPY --from=build /harness/gradle/src/build/libs/spring-petclinic-kotlin-3.3.0.jar /app/spring-kotlin-petclinic.jar
 
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app/spring-kotlin-petclinic.jar"]
-

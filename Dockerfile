@@ -1,7 +1,7 @@
 
 # First stage: Build the application
 FROM openjdk:24-slim-bookworm AS build
-COPY --chown=gradle:gradle . /harness/gradle/src
+#COPY --chown=gradle:gradle . /harness/gradle/src
 WORKDIR /harness/gradle/src
 RUN ./gradlew build
 RUN pwd

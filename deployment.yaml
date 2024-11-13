@@ -1,37 +1,37 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: petclinicservice
-  namespace: default
-spec:
-  selector:
-    app: petclinic
-  ports:
-    - port: 8080
-      targetPort: 8080
-  type: LoadBalancer
-
----
+{{- if .Values.dockercfg}}  
+apiVersion: v1  
+kind: Secret  
+metadata:  
+  name: {{.Values.name}}-dockercfg  
+  annotations:  
+    harness.io/skip-versioning: "true" 
+data:  
+  .dockercfg: {{.Values.dockercfg}}  
+type: kubernetes.io/dockercfg  
+---  
+{{- end}}  
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: petclinic
-  namespace: default
+  name: goapp
+  namespace: {{ .Values.namespace}}
 spec:
-  replicas: 2
+  replicas: 2 # tells deployment to run 2 pods matching the template
   selector:
     matchLabels:
-      app: petclinic
+      app: goapp
   template:
     metadata:
       labels:
-        app: petclinic
+        app: goapp
     spec:
-      imagePullSecrets:
-        - name: ecr-registry
+      {{- if .Values.dockercfg}}  
+      imagePullSecrets:  
+      - name: {{.Values.name}}-dockercfg  
+      {{- end}} 
       containers:
-        - name: petclinic
-          image: "759984737373.dkr.ecr.ap-southeast-2.amazonaws.com/kotlin:8"
-          ports:
-            - containerPort: 8080
+      - name: goapp
+        image: {{ .Values.image}}
+        ports:
+        - containerPort: 80

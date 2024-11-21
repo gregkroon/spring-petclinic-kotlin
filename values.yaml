@@ -2,4 +2,5 @@ image: <+artifact.image>
 createNamespace: true  
 namespace: "<+infra.namespace>"
 dockercfg: <+artifact.imagePullSecret>
+imagePullSecrets: <+artifact.imagePullSecret>
 name: goapp
